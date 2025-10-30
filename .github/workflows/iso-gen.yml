@@ -1,14 +1,16 @@
 name: Build ISO
 
 on:
-  workflow_call:
-    inputs:
-      pr:
-        required: false
-        type: string
-      parent_job_name:
-        required: true
-        type: string
+  schedule:
+    - cron:
+        "00 06 * * *" # build at 06:00 UTC every day
+        # (20 minutes after last ublue images start building)
+  push:
+    paths-ignore: # don't rebuild if only documentation has changed
+      - "**.md"
+
+  pull_request:
+  workflow_dispatch: # allow manually triggering builds
 
 jobs:
   load_vars:
